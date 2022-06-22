@@ -1,27 +1,36 @@
-# MyFirstApp
+## NOTES
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.0.
+<a routerLink="/users">
 
-## Development server
+if the above anchor tag is in app component then if we remove / like this <a routerLink="users"> then it will work perfectly fine but if there are nested component and if you removed / in routerLink then it will give error because in root component there is by default http://localhost/4200/ so there will be no change but if you go one level down then it will take different path ex. users/users so there will be error as there is no such path registered in app module.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+but if you use relative path as path of directory in app,
+like if you go one path up
+<a routerLink="../users">
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## We can get currently active route by injecting of type ActivatedRoute and make sure to import it from @angular/router package
 
-## Build
+Activated route simply injects the currently active routes so for the component you loaded, this will be the route which loaded this component and the route simply is kind of a complex JS obj which keeps a lot of meta information about the currently active route.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## NOTE: The ActivatedRoute Object we injected after giving dynamic path will give us an access to the id passed in URL => Selected user
 
-## Running unit tests
+dynamic path in app module:
+#  path:'users/:id/:name', component:UserComponent
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## how to access this parameters so in ts file use ActivatedRoute
+ user: {id: number, name: string};
 
-## Running end-to-end tests
+  constructor(private route: ActivatedRoute) { }
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+  ngOnInit() {
+    this.user = {
+      id:this.route.snapshot.params['id'],
+      name:this.route.snapshot.params['name']
+    }
+  }
 
-## Further help
+  but the above only happens when we are on other component.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  now we can do if we on same component usinf params observable
+  Observables are features added by some other third party package, not by angular but heavily work by angular which allows to work with asynchronous tasks and this is ASync task as parameter might changes
